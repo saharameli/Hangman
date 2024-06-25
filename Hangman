@@ -1,0 +1,70 @@
+import random
+with open('words.txt', 'w') as wordsfile:
+    wordsfile.write('butterfly\nelephant\nwater\nsoil\nflower\npencil\nruler\ntrainbow\nwaterfall\nnotebook\nmarker\nlaptop\nbanana\nmilk\nglass\ncheese\nwig\npants\nshirts\nmobile')
+
+with open('words.txt', 'r') as wordsfile:
+    wordslist = wordsfile.read().split('\n')
+
+index = random.randint(0, len(wordslist) - 1)
+selected = wordslist[index]
+attempt = len(selected)
+
+print("Welcome to the game!")
+print("The length of the selected word has", attempt, "letters.")
+
+used_letters = []
+
+while attempt > 0:
+
+    guessed_word = ""
+    for letter in selected:
+        if letter in used_letters:
+            guessed_word += letter
+        else:
+            guessed_word += "_"
+    print(guessed_word)
+
+
+    userin = input("Guess a letter or enter 'guess' to guess the word: ")
+
+
+    if userin == 'guess':
+        guess = input("Enter your guess for the word: ")
+        if guess == selected:
+            print("Congratulations! You guessed the word correctly:", selected)
+            break
+        else:
+            print("Sorry, that's not the word. Try again.")
+            continue
+
+
+    if len(userin) != 1:
+        print("Please enter only one letter.")
+        continue
+
+    if userin < 'a' or userin > 'z':
+        print("Please enter a valid letter.")
+        continue
+
+    if userin in used_letters:
+        print("You already guessed that letter. Try again.")
+        continue
+
+    used_letters.append(userin)
+
+    if userin in selected:
+        print("Correct guess!")
+        all_letters_guessed = True
+        for letter in selected:
+            if letter not in used_letters:
+                all_letters_guessed = False
+                break
+        if all_letters_guessed:
+            print("Congratulations! You guessed the word:", selected)
+            break
+    else:
+        attempt -= 1
+        print("Wrong guess. You have", attempt, "attempts left.")
+
+if attempt == 0:
+    print("Game over! The word was:", selected)
